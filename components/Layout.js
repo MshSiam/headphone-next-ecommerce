@@ -1,7 +1,21 @@
+import Head from "next/head"
 import React from "react"
+import Footer from "./Footer"
+import Navbar from "./Navbar"
 
-const Layout = () => {
-  return <div>layout</div>
+const Layout = ({ children }) => {
+  return (
+    <div className="layout">
+      <Head>
+        <title>Headphones Store</title>
+      </Head>
+      <header>
+        <Navbar />
+      </header>
+      <main className="main-container">{children}</main>
+      <Footer />
+    </div>
+  )
 }
 
 export default Layout
