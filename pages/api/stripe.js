@@ -8,28 +8,28 @@ export default async function handler(req, res) {
       const params = {
         submit_type: "pay",
         mode: "payment",
-        peyment_method_types: ["card"],
+        payment_method_types: ["card"],
         billing_address_collection: "auto",
         shipping_options: [
           { shipping_rate: "shr_1LdqroFim1hcZrYeDYe9mYOY" },
           { shipping_rate: "shr_1Ldqt3Fim1hcZrYeHg7btkTh" }
         ],
         line_items: req.body.map((item) => {
-          const img = item.image[0].asset_ref
-          const newImage = img
-            .replace(
-              "image-",
-              "https://cdn.sanity.io/images/kr7ndcea/production/"
-            )
-            .replace("-webp", ".webp")
-          console.log("image", newImage)
+          // const img = item.image[0].asset_ref
+          // const newImage = img
+          //   .replace(
+          //     "image-",
+          //     "https://cdn.sanity.io/images/kr7ndcea/production/"
+          //   )
+          //   .replace("-webp", ".webp")
+          // console.log("image", newImage)
 
           return {
             price_data: {
               currency: "usd",
               product_data: {
-                name: item.name,
-                images: [newImage]
+                name: item.name
+                // images: [img]
               },
               unit_amount: item.price * 100
             },
@@ -44,7 +44,7 @@ export default async function handler(req, res) {
         cancel_url: `${req.headers.origin}/?canceled==true`
       }
 
-      const session = await stripe.checkout.session.create(params)
+      const session = await stripe.checkout.sessions.create(params)
       res.status(200).json(session)
     } catch (error) {
       res.status(error.statusCode || 500).json(error.message)

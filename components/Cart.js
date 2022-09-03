@@ -16,6 +16,14 @@ import getStripe from "../lib/getStripe"
 
 const Cart = () => {
   const cartRef = useRef()
+  const {
+    totalPrice,
+    totalQuantities,
+    cartItems,
+    setShowCart,
+    toggleCartItemQuanitity,
+    onRemove
+  } = useStateContext()
 
   const handleCheckout = async () => {
     const stripe = await getStripe()
@@ -25,7 +33,7 @@ const Cart = () => {
       headers: {
         "Content-Type": "application/json"
       },
-      body: { cartItems: JSON.stringify(cartItems) }
+      body: JSON.stringify(cartItems)
     })
 
     if (response.statusCode === 500) return
@@ -37,14 +45,6 @@ const Cart = () => {
     stripe.redirectToCheckout({ sessionId: data.id })
   }
 
-  const {
-    totalPrice,
-    totalQuantities,
-    cartItems,
-    setShowCart,
-    toggleCartItemQuanitity,
-    onRemove
-  } = useStateContext()
   return (
     <div className="cart-wrapper" ref={cartRef}>
       <div className="cart-container">
@@ -54,17 +54,18 @@ const Cart = () => {
           onClick={() => setShowCart(false)}>
           <AiOutlineLeft />
           <span className="heading">Your Cart</span>
-          <span className="cart-num-items">({totalQuantities} item)</span>
+          <span className="cart-num-items">({totalQuantities} items)</span>
         </button>
+
         {cartItems.length < 1 && (
           <div className="empty-cart">
-            <AiOutlineShopping size={250} />
-            <h3>Your Cart is Empty</h3>
+            <AiOutlineShopping size={150} />
+            <h3>Your shopping bag is empty</h3>
             <Link href="/">
               <button
                 type="button"
-                className="btn"
-                onClick={() => setShowCart(false)}>
+                onClick={() => setShowCart(false)}
+                className="btn">
                 Continue Shopping
               </button>
             </Link>
@@ -73,7 +74,7 @@ const Cart = () => {
 
         <div className="product-container">
           {cartItems.length >= 1 &&
-            cartItems.map((item, index) => (
+            cartItems.map((item) => (
               <div className="product" key={item._id}>
                 <img
                   src={urlFor(item?.image[0])}
@@ -82,7 +83,7 @@ const Cart = () => {
                 <div className="item-desc">
                   <div className="flex top">
                     <h5>{item.name}</h5>
-                    <h4>${item.price * item.quantity}</h4>
+                    <h4>${item.price}</h4>
                   </div>
                   <div className="flex bottom">
                     <div>
@@ -120,7 +121,7 @@ const Cart = () => {
         {cartItems.length >= 1 && (
           <div className="cart-bottom">
             <div className="total">
-              <h3>Subtotal : </h3>
+              <h3>Subtotal:</h3>
               <h3>${totalPrice}</h3>
             </div>
             <div className="btn-container">
