@@ -7,9 +7,9 @@ This is fullstack web application using react js, next js, sanity.
 
 ## Features
 
-- Fully Responsive  
-- Any user can buy products don't need to login / signup.
-- User can see his order details.
+- This website is fully Responsive for desktop, tablet and mobile devices. 
+- Any user can add products to his cart. 
+- User can increase, decrease or delete products from the cart.
 - Stripe is used to pay the price of the products.
 
 
